@@ -1,0 +1,64 @@
+import React from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+const Menu = () => {
+
+  const [profileClicked,setProfileClick]=useState(false);
+  const [menuSelected,setMenuSelected]=useState(0);
+
+  function handleMenuSelection(index){
+    setMenuSelected(index);
+  }
+
+  function handleProfileClick(){
+    setProfileClick(!profileClicked);
+  }
+  return (
+    <div className="menu-container">
+      <img src="logo.png" style={{ height:"1.5rem"}} className="img-fluid" />
+      <div className="menus">
+        <ul>
+          <li>
+            <Link to="/" onClick={()=>handleMenuSelection(0)}  className="" style={{textDecorationLine:"none"}}>
+            <p className={menuSelected===0 ? "menu selected" : "menu"}>Dashboard</p>
+            </Link>
+          </li>
+          <li>
+            <Link to="/orders" onClick={()=>handleMenuSelection(1)}  className="" style={{textDecorationLine:"none"}}>
+            <p className={menuSelected===1 ? "menu selected" : "menu"}>Orders</p>
+            </Link>
+          </li>
+          <li>
+            <Link to="/holdings" onClick={()=>handleMenuSelection(2)}  className="" style={{textDecorationLine:"none"}}>
+            <p className={menuSelected===2 ? "menu selected" : "menu"}>Holdings</p>
+            </Link>
+          </li>
+          <li>
+            <Link to="/positions" onClick={()=>handleMenuSelection(3)} className="" style={{textDecorationLine:"none"}} >
+            <p className={menuSelected===3 ? "menu selected" : "menu"}>Positions</p>
+            </Link>
+          </li>
+          <li>
+            <Link to="/funds" onClick={()=>handleMenuSelection(4)} className="" style={{textDecorationLine:"none"}} >
+            <p className={menuSelected===4 ? "menu selected" : "menu"}>Funds</p>
+            </Link>
+          </li>
+          <li>
+            <Link to="/apps" onClick={()=>handleMenuSelection(5)}  className="" style={{textDecorationLine:"none"}}>
+            <p className={menuSelected===5 ? "menu selected" : "menu"}>Apps</p>
+            </Link>
+          </li>
+        </ul>
+        <hr />
+        <div className="profile" onClick={handleProfileClick}>
+          <div className="avatar">ZU</div>
+          <p className="username">USERID</p>
+        </div>
+        
+      </div>
+    </div>
+  );
+};
+
+export default Menu;
