@@ -18,7 +18,7 @@ const Menu = () => {
     <div className="menu-container">
       <img src="logo.png" style={{ height:"1.5rem"}} className="img-fluid" />
       <div className="menus">
-        <ul>
+        <ul className="mb-0">
           <li>
             <Link to="/" onClick={()=>handleMenuSelection(0)}  className="" style={{textDecorationLine:"none"}}>
             <p className={menuSelected===0 ? "menu selected" : "menu"}>Dashboard</p>
@@ -51,12 +51,14 @@ const Menu = () => {
           </li>
         </ul>
         <hr />
-        <div className="profile" onClick={handleProfileClick}>
-          <div className="avatar">ZU</div>
-          <p className="username">USERID</p>
-        </div>
         
       </div>
+
+      <div className="profile d-flex align-items-center" onClick={handleProfileClick}>
+          <div className="avatar">ZU</div>
+          <p className="username mb-0">USERID</p>
+        </div>
+
     </div>
   );
 };
