@@ -1,29 +1,45 @@
 import React from "react";
-import { holdings } from "../../data/data";
-const Holdings = () => {
+import { useEffect } from "react";
+// import { holdings } from fetch('http://localhost:3001/holdings');
+import { useState } from "react";
+import axios from "axios";
+const Holdings =  () => {
+    let [holdings,updateHoldings]=useState([]);
+  useEffect(()=>{
+                  axios.get('http://localhost:3001/holdings')
+                  .then(res=>{
+                   let fetchedHoldings=res.data;
+                   updateHoldings(fetchedHoldings);
+                  })
+                }
+);
+
   return (
     <>
       <h3 className="title">Holdings ({holdings.length})</h3>
 
       <div className="order-table">
         <table>
-          <tr>
-            <th>Instrument</th>
-            <th>Qty.</th>
-            <th>Avg. cost</th>
-            <th>LTP</th>
-            <th>Cur. val</th>
-            <th>P&L</th>
-            <th>Net chg.</th>
-            <th>Day chg.</th>
-          </tr>
+          <thead>
+            <tr>
+            <td>Instrument</td>
+            <td>Qty.</td>
+            <td>Avg. cost</td>
+            <td>LTP</td>
+            <td>Cur. val</td>
+            <td>P&L</td>
+            <td>Net chg.</td>
+            <td>Day chg.</td>
+            </tr>
+          </thead>
+          <tbody>
           {holdings.map((stock,index)=>{
             const currValue=stock.price*stock.qty;
             const isProfit=(currValue-(stock.avg*stock.qty))>=0.0;
             const profitClass=isProfit ? "profit" : "loss";
             stock.dayProfit= stock.dayProfit ? stock.dayProfit : isProfit;
             const dayClass=stock.dayProfit ? "profit" : "loss";
-            return  <tr>
+            return  <tr key={stock._id} >
             <td>{stock.name}</td>
             <td>{stock.qty}</td>
             <td>{stock.avg}</td>
@@ -34,6 +50,7 @@ const Holdings = () => {
             <td className={dayClass}>{stock.day}</td>
           </tr>;
           })}
+          </tbody>
         </table>
       </div>
 
