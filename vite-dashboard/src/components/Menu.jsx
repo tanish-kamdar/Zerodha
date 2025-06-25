@@ -1,11 +1,22 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Menu = () => {
+  
+  let initialRoute=useLocation().pathname;
+  let idx;
+  switch(initialRoute){
+    case '/' : idx=0; break;
+    case '/orders' : idx=1; break;
+    case '/holdings' : idx=2; break;
+    case '/positions' : idx=3; break;
+    case '/funds' : idx=4; break;
+    case '/apps' : idx=5; break;
+  }
 
   const [profileClicked,setProfileClick]=useState(false);
-  const [menuSelected,setMenuSelected]=useState(0);
+  const [menuSelected,setMenuSelected]=useState(idx);
 
   function handleMenuSelection(index){
     setMenuSelected(index);

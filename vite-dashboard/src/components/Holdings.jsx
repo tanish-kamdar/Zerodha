@@ -3,16 +3,14 @@ import { useEffect } from "react";
 // import { holdings } from fetch('http://localhost:3001/holdings');
 import { useState } from "react";
 import axios from "axios";
-const Holdings =  () => {
-    let [holdings,updateHoldings]=useState([]);
-  useEffect(()=>{
-                  axios.get('http://localhost:3001/holdings')
-                  .then(res=>{
-                   let fetchedHoldings=res.data;
-                   updateHoldings(fetchedHoldings);
-                  })
-                }
-);
+const Holdings = () => {
+  let [holdings, updateHoldings] = useState([]);
+  useEffect(() => {
+    axios.get("http://localhost:3001/holdings").then((res) => {
+      let fetchedHoldings = res.data;
+      updateHoldings(fetchedHoldings);
+    });
+  });
 
   return (
     <>
@@ -22,34 +20,38 @@ const Holdings =  () => {
         <table>
           <thead>
             <tr>
-            <td>Instrument</td>
-            <td>Qty.</td>
-            <td>Avg. cost</td>
-            <td>LTP</td>
-            <td>Cur. val</td>
-            <td>P&L</td>
-            <td>Net chg.</td>
-            <td>Day chg.</td>
+              <td>Instrument</td>
+              <td>Qty.</td>
+              <td>Avg. cost</td>
+              <td>LTP</td>
+              <td>Cur. val</td>
+              <td>P&L</td>
+              <td>Net chg.</td>
+              <td>Day chg.</td>
             </tr>
           </thead>
           <tbody>
-          {holdings.map((stock,index)=>{
-            const currValue=stock.price*stock.qty;
-            const isProfit=(currValue-(stock.avg*stock.qty))>=0.0;
-            const profitClass=isProfit ? "profit" : "loss";
-            stock.dayProfit= stock.dayProfit ? stock.dayProfit : isProfit;
-            const dayClass=stock.dayProfit ? "profit" : "loss";
-            return  <tr key={stock._id} >
-            <td>{stock.name}</td>
-            <td>{stock.qty}</td>
-            <td>{stock.avg}</td>
-            <td>{stock.price}</td>
-            <td>{currValue.toFixed(2)}</td>
-            <td className={profitClass}>{(currValue-(stock.avg*stock.qty)).toFixed(2)}</td>
-            <td className={profitClass}>{stock.net}</td>
-            <td className={dayClass}>{stock.day}</td>
-          </tr>;
-          })}
+            {holdings.map((stock, key) => {
+              const currValue = stock.price * stock.qty;
+              const isProfit = currValue - stock.avg * stock.qty >= 0.0;
+              const profitClass = isProfit ? "profit" : "loss";
+              stock.dayProfit = stock.dayProfit ? stock.dayProfit : isProfit;
+              const dayClass = stock.dayProfit ? "profit" : "loss";
+              return (
+                <tr key={stock._id}>
+                  <td>{stock.name}</td>
+                  <td>{stock.qty}</td>
+                  <td>{stock.avg}</td>
+                  <td>{stock.price}</td>
+                  <td>{currValue.toFixed(2)}</td>
+                  <td className={profitClass}>
+                    {(currValue - stock.avg * stock.qty).toFixed(2)}
+                  </td>
+                  <td className={profitClass}>{stock.net}</td>
+                  <td className={dayClass}>{stock.day}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

@@ -181,6 +181,12 @@ app.get('/holdings',async (req,res)=>{
         let holdings=await HoldingModel.find();
         res.send(holdings);
 });
+
+app.get('/positions',async (req,res)=>{
+        let positions=await PositionModel.find();
+        res.send(positions);
+});
+
 app.listen(PORT,()=>{
     console.log(`Listening to port ${PORT}`);
     mongoose.connect(url);
