@@ -189,6 +189,47 @@ app.get('/positions',async (req,res)=>{
 app.post('/order',async (req,res)=>{
         let order=new OrderModel(req.body);
         await order.save();
+
+        let holding=await HoldingModel.findOne({name:order.name});
+        
+        if(order.mode==="BUY"){
+                if(!holding){
+                        await HoldingModel.insertOne({
+                                name:order.name,
+                                qty: order.qty,
+                                avg: order.price,
+                                net : "+0.00%",
+                                day: "+0.00%"
+                        });
+                }else{
+                        let newQty=holding.qty+order.qty;
+                        
+                        await HoldingModel.updateOne({name:holding.name},{
+                                qty: newQty,
+                                avg: parseFloat(((holding.qty*holding.avg+order.qty*order.price)/(holding.qty+order.qty)).toFixed(2))
+                        });
+                }
+
+        }else if(order.mode==="SELL"){
+                if(!holding) return;
+
+                let newQty=holding.qty-order.qty;
+
+                if(newQty===0){
+                        await HoldingModel.deleteOne({name:holding.name});
+                        return;
+                }else{
+                        await HoldingModel.updateOne({name:holding.name},{
+                                qty: newQty
+                        });
+                }
+        }
+});
+
+app.get('/holdings/:uid/qty',async (req,res)=>{
+        let uid=req.params.uid;
+        let qty=await HoldingModel.find({name : uid});
+        res.send(qty);
 });
 
 app.listen(PORT,()=>{
