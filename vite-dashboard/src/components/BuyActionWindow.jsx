@@ -1,12 +1,14 @@
 import "./BuyActionWindow.css";
 
-import {GeneralContext} from GeneralContext;
-
+import GeneralContext from "./GeneralContext";
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from 'axios';
 
-function BuyActionWindow(uid) {
+export default function BuyActionWindow(uid) {
     const [stockPrice,setStockPrice]=useState(0.0);
     const [stockQuantity,setStockQuantity]=useState(1);
+    const generalContext=useContext(GeneralContext);
 
     function handleBuyClick(){
 
@@ -17,15 +19,15 @@ function BuyActionWindow(uid) {
         mode: "BUY",
         });
 
-        GeneralContext.closeBuyWindow();
+        generalContext.closeBuyWindow();
     }
 
     function handleCancelClick(){
 
-        GeneralContext.closeBuyWindow();
+        generalContext.closeBuyWindow();
     }
 
-    return ( <div className="container" id="buy-window" draggable="true">
+    return ( <div className="container" id="buy-window" draggable='true'>
       <div className="regular-order">
         <div className="inputs">
           <fieldset>
@@ -53,7 +55,7 @@ function BuyActionWindow(uid) {
       </div>
 
       <div className="buttons">
-        <span>Margin required ₹140.65</span>
+        <span>Margin required {stockPrice*stockQuantity}</span>
         <div>
           <Link className="btn btn-blue" onClick={handleBuyClick}>
             Buy
@@ -65,5 +67,3 @@ function BuyActionWindow(uid) {
       </div>
     </div> );
 }
-
-export default BuyActionWindow;

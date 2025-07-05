@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Tooltip, Grow } from "@mui/material";
 import { KeyboardArrowUp, KeyboardArrowDown, BarChartOutlined, MoreHoriz } from "@mui/icons-material";
+import GeneralContext from "./GeneralContext";
 function WLItem({ stock }) {
   let [beingHovered, setBeingHovered] = useState(false);
   let activateActions = () => {
@@ -9,6 +10,8 @@ function WLItem({ stock }) {
   let deactivateActions = () => {
     setBeingHovered(false);
   };
+
+ 
   return (
     <div
       className="item border border-start-0 border-end-0 py-1"
@@ -30,10 +33,17 @@ function WLItem({ stock }) {
   );
 }
 function Actions({ uid }) {
+  const generalContext=useContext(GeneralContext);
+
+   function handleBuyClick(){
+    console.log(`handleBuyClick triggered`);
+    generalContext.openBuyWindow(uid);
+  }
+
   return (
     <span className="actions text-end mt-1">
       <span>
-        <Tooltip title="Buy(B)" placement="top" arrow>
+        <Tooltip title="Buy(B)" placement="top" arrow onClick={handleBuyClick}>
           <button className="buy">Buy</button>
         </Tooltip>
       </span>

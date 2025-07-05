@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createContext } from "react";
-import BuyActionWindow from "./BuyActionWindow";
+import BuyActionWindow from "./BuyActionWindow.jsx";
 
 const GeneralContext=createContext({
     openBuyWindow : (uid)=>{},
@@ -12,6 +12,7 @@ export function GeneralContextProvider(props){
     const [selectedStockUID,setSelectedStockUID]=useState("");
 
     function handleOpenBuyWindow(uid){
+        console.log(`Open Buy Window triggered`);
         setIsBuyWindowOpen(true);
         setSelectedStockUID(uid);
     }
