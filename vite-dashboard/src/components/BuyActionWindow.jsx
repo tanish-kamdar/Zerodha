@@ -5,14 +5,14 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
-export default function BuyActionWindow(uid) {
+export default function BuyActionWindow({uid}) {
     const [stockPrice,setStockPrice]=useState(0.0);
     const [stockQuantity,setStockQuantity]=useState(1);
     const generalContext=useContext(GeneralContext);
 
     function handleBuyClick(){
 
-        axios.post("http://localhost:3001/newOrder", {
+        axios.post("http://localhost:3001/order", {
         name: uid,
         qty: stockQuantity,
         price: stockPrice,

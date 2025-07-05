@@ -186,6 +186,10 @@ app.get('/positions',async (req,res)=>{
         let positions=await PositionModel.find();
         res.send(positions);
 });
+app.post('/order',async (req,res)=>{
+        let order=new OrderModel(req.body);
+        await order.save();
+});
 
 app.listen(PORT,()=>{
     console.log(`Listening to port ${PORT}`);
