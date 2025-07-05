@@ -4,27 +4,43 @@ import GeneralContext from "./GeneralContext";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import "./SellActionWindow.css"
+import { useEffect } from "react";
 
-export default function BuyActionWindow({uid}) {
+
+
+export default function SellActionWindow({uid}) {
     const [stockPrice,setStockPrice]=useState(0.0);
     const [stockQuantity,setStockQuantity]=useState(1);
     const generalContext=useContext(GeneralContext);
+    const [qty,setQty]=useState(undefined);
 
-    function handleBuyClick(){
+    useEffect(()=>{
+      async function fetchHoldings() {
+        let result=await axios.get(`http://localhost:3001/holdings/${uid}/qty`);
+        let documents=result.data;
+        let quantity=documents.reduce((sum,doc)=>sum+doc.qty,0);
+        setQty(quantity);
+      }
+      fetchHoldings();
+  });
 
+    async function handleSellClick(){
+        
         axios.post("http://localhost:3001/order", {
         name: uid,
         qty: stockQuantity,
         price: stockPrice,
-        mode: "BUY",
+        mode: "SELL",
         });
+        console.log(`Sell Order placed`);
 
-        generalContext.closeBuyWindow();
+        generalContext.closeSellWindow();
     }
 
     function handleCancelClick(){
 
-        generalContext.closeBuyWindow();
+        generalContext.closeSellWindow();
     }
 
     return ( <div className="container" id="buy-window" draggable='true'>
@@ -53,12 +69,13 @@ export default function BuyActionWindow({uid}) {
           </fieldset>
         </div>
       </div>
-
+      {stockQuantity>qty && <p style={{color:"red"}}>Quantity available to sell : {qty}</p>}
       <div className="buttons">
-        <span>Margin required {stockPrice*stockQuantity}</span>
+        <p className="">Margin required 0</p>
+        
         <div>
-          <Link className="btn btn-blue" onClick={stockQuantity>0 && handleBuyClick}>
-            Buy
+          <Link className="btn btn-red" onClick={stockQuantity<=qty && stockQuantity>0 && handleSellClick }>
+            Sell
           </Link>
           <Link to="" className="btn btn-grey" onClick={handleCancelClick}>
             Cancel

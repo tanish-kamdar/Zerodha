@@ -36,8 +36,11 @@ function Actions({ uid }) {
   const generalContext=useContext(GeneralContext);
 
    function handleBuyClick(){
-    console.log(`handleBuyClick triggered`);
     generalContext.openBuyWindow(uid);
+  }
+
+  function handleSellClick(){
+    generalContext.openSellWindow(uid);
   }
 
   return (
@@ -48,7 +51,7 @@ function Actions({ uid }) {
         </Tooltip>
       </span>
       <span>
-      <Tooltip title="Sell(S)" placement="top" arrow>
+      <Tooltip title="Sell(S)" placement="top" arrow onClick={handleSellClick}>
         <button className="sell">Sell</button>
       </Tooltip>
       </span>
