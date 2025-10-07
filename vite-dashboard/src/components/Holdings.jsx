@@ -3,6 +3,7 @@ import { useEffect } from "react";
 // import { holdings } from fetch('http://localhost:3001/holdings');
 import { useState } from "react";
 import axios from "axios";
+import BarChart from "./BarChart";
 const Holdings = () => {
   let [holdings, updateHoldings] = useState([]);
   useEffect(() => {
@@ -11,7 +12,17 @@ const Holdings = () => {
       updateHoldings(fetchedHoldings);
     });
   });
-
+let labels = holdings.map((holding) => holding.name);
+ let data = {
+   labels,
+   datasets: [
+     {
+       label: 'Stock Value',
+       data: holdings.map((holding) => holding.qty*holding.price),
+       backgroundColor: 'rgb(33, 150, 243)',
+     }
+   ],
+ };
   return (
     <>
       <h3 className="title">Holdings ({holdings.length})</h3>
@@ -74,6 +85,7 @@ const Holdings = () => {
           <p>P&L</p>
         </div>
       </div>
+      <BarChart data={data}/>
     </>
   );
 };
