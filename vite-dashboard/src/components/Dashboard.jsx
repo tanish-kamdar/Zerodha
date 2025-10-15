@@ -11,6 +11,7 @@ import Summary from "./Summary";
 import WatchList from "./WatchList";
 
 import { GeneralContextProvider } from "./GeneralContext";
+import Login from "./Login";
 
 const Dashboard = () => {
   return (

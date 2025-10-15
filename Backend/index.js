@@ -11,12 +11,15 @@ const bodyParser=require('body-parser');
 const cors=require('cors');
 const userRoute=require('./routes/user');
 const cookieParser=require('cookie-parser');
+const morgan=require('morgan');
 
-
-app.use(cors());
+app.use(cors({
+        origin : 'http://localhost:5173',
+        credentials : true,
+}));
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.SECRET));
-
+app.use(morgan('dev'))
 app.get('/holdings',async (req,res)=>{
         let holdings=await HoldingModel.find();
         res.send(holdings);
