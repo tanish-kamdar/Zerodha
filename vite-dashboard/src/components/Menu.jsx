@@ -1,6 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useDispatch,useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { logout } from "../../features/userSlice";
+import { useEffect } from "react";
 
 const Menu = () => {
   
@@ -24,6 +27,17 @@ const Menu = () => {
 
   function handleProfileClick(){
     setProfileClick(!profileClicked);
+  }
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
+  const state=useSelector((state)=>state.user);
+  useEffect(()=>{
+    console.log(state);
+  },[state]);
+  function handleLogout(){
+    //Backend API integration yet to be implemented.
+    dispatch(logout());
+    navigate('/login');
   }
   return (
     <div className="menu-container">
@@ -69,7 +83,7 @@ const Menu = () => {
           <div className="avatar">ZU</div>
           <p className="username mb-0">USERID</p>
         </div>
-
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };

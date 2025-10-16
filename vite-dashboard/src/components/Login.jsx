@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '/logo.png';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import existingUserSchema from '../schemas/existingUser';
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux';
+import {login} from '../../features/userSlice'
 // --- Icon Components (as SVGs) for clarity and reusability ---
 
 const KiteLogo = () => (
@@ -45,12 +47,21 @@ export default function Login() {
   let {register, handleSubmit, setError, formState : {errors, isSubmitting}}=useForm({
     resolver : zodResolver(existingUserSchema)
   });
-
+  const user=useSelector((state)=>state.user);
+      useEffect(()=>{
+        console.log(user);
+      },[user]);
+    const dispatch=useDispatch();
   const onSubmit=async (data)=>{
     try{
     let res=await axios.post('http://localhost:3001/user/login',data,{withCredentials: true});
     console.log(res.data);
+    
     if(res.data.success){
+      dispatch(login({
+        user: res.data.user,
+        accessToken : res.data.accessToken
+      }))
       navigate('/');
     }
     }catch(err){

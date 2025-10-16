@@ -38,11 +38,12 @@ module.exports.Signup = async (req, res, next) => {
     });
 
     let accessToken = createAccessToken({id: user._id});
-
+    let {password,__v,createdAt,modifiedAt,...userWithoutSensitive}=user._doc;
     res.status(201).json({
       success: true,
       message: "User registered.",
       accessToken,
+      user: userWithoutSensitive
     });
   } catch (error) {
     next(error);
@@ -89,10 +90,12 @@ module.exports.Login = async (req, res, next) => {
       sameSite: "Strict",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
+    let {password : dbPassword,__v,createdAt,modifiedAt,...userWithoutSensitive}=dbUser._doc;
     res.status(200).json({
       success: true,
       message: "User logged in.",
-      accessToken
+      accessToken,
+      user : userWithoutSensitive
     });
   } catch (err) {
     next(err);
