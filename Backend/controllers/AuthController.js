@@ -38,10 +38,11 @@ module.exports.Signup = async (req, res, next) => {
     });
 
     let accessToken = createAccessToken({id: user._id});
-
+    let {password,createdAt,modifiedAt,__v,...userWithoutSensitive}=user._doc;
     res.status(201).json({
       success: true,
       message: "User registered.",
+      user : userWithoutSensitive ,
       accessToken,
     });
   } catch (error) {

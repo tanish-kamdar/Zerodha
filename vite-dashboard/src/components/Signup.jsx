@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "/logo.png";
 import { useForm } from "react-hook-form";
-import {z} from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import newUserSchema from "../schemas/newUser";
-import axios from 'axios';
+import axios from "axios";
+import { useContext } from "react";
+import { UserContext } from "./UserProvider";
 
 // Reusing Icon Components from the Login example for consistency
 export const KiteLogo = () => (
@@ -62,7 +64,7 @@ export const AppleIcon = () => (
 const Signup = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const navigate=useNavigate();
+
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
@@ -70,28 +72,40 @@ const Signup = () => {
   const toggleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible);
   };
-  
+
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver : zodResolver(newUserSchema)
+    resolver: zodResolver(newUserSchema),
   });
-
+  const navigate = useNavigate();
+  const user = useContext(UserContext);
   const onSubmit = async (data) => {
-    try{
-    let res=await axios.post('http://localhost:3001/user/signup',data,{withCredentials: true});
-    console.log(res.data);
-    if(res.data.success){
-      navigate('/');
-    }
-    }catch(err){
+    try {
+      let res = await axios.post("http://localhost:3001/user/signup", data, {
+        withCredentials: true,
+      });
+      console.log(res.data);
+      if (res.data.success) {
+        user.dispatch({
+          type: "LOGIN",
+          payload: {
+            user: res.data.user,
+            accessToken: res.data.accessToken,
+            isAuthenticated: true,
+          },
+        });
+        navigate("/");
+        
+      }
+    } catch (err) {
       console.log(err);
-      setError('root',{
-        type: 'Invalid Input',
-        message: err.response.data.error
+      setError("root", {
+        type: "Invalid Input",
+        message: err.response.data.error,
       });
     }
   };
