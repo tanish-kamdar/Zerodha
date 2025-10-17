@@ -4,14 +4,16 @@ import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import BarChart from "./BarChart";
+import api from "../../util/api";
+
 const Holdings = () => {
   let [holdings, updateHoldings] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:3001/holdings").then((res) => {
+    api.get("http://localhost:3001/holdings").then((res) => {
       let fetchedHoldings = res.data;
       updateHoldings(fetchedHoldings);
     });
-  });
+  },[]);
 let labels = holdings.map((holding) => holding.name);
  let data = {
    labels,

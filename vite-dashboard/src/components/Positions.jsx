@@ -2,13 +2,15 @@ import React from "react";
 import { positions } from "../../data/data";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import api
+ from "../../util/api";
 const Positions = () => {
   let [positions, updatePositions] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:3001/positions").then((res) => {
+    api.get("http://localhost:3001/positions").then((res) => {
       updatePositions(res.data);
     });
-  });
+  },[]);
   return (
     <>
       <h3 className="title">Positions (2)</h3>

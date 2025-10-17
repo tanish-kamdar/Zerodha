@@ -12,6 +12,7 @@ const cors=require('cors');
 const userRoute=require('./routes/user');
 const cookieParser=require('cookie-parser');
 const morgan=require('morgan');
+const verifyToken = require('./middleware/verifyToken');
 
 app.use(cors({
         origin : 'http://localhost:5173',
@@ -20,16 +21,18 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.SECRET));
 app.use(morgan('dev'))
-app.get('/holdings',async (req,res)=>{
+app.get('/holdings',verifyToken, async (req,res)=>{
+       
         let holdings=await HoldingModel.find();
         res.send(holdings);
 });
 
-app.get('/positions',async (req,res)=>{
+app.get('/positions',verifyToken,async (req,res)=>{
+        console.log(req.user);
         let positions=await PositionModel.find();
         res.send(positions);
 });
-app.post('/order',async (req,res)=>{
+app.post('/order',verifyToken,async (req,res)=>{
         let order=new OrderModel(req.body);
         await order.save();
 
@@ -78,13 +81,7 @@ app.get('/holdings/:uid/qty',async (req,res)=>{
 //User Routes
 app.use("/user",userRoute);
 
-app.get("/cookies",(req,res)=>{
-        res.send(req.signedCookies);
-})
-app.get("/signcookies",(req,res)=>{
-        res.cookie("name",req.query.name,{signed:true});
-        res.send(`Cookie sent`);
-})
+
 app.listen(PORT,()=>{
     console.log(`Listening to port ${PORT}`);
     mongoose.connect(url);
