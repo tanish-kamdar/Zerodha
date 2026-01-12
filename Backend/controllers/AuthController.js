@@ -149,9 +149,7 @@ module.exports.Logout = async (req,res) => {
   res
     .clearCookie("refreshToken", {
       httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      path: "/user/refresh"
+      sameSite: "Strict"
     })
     .json({ message: "Logged out" });
 };

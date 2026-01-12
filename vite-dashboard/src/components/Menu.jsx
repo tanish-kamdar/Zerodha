@@ -4,6 +4,7 @@ import { useDispatch,useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../../features/userSlice";
 import { useEffect } from "react";
+import api from "../../util/api";
 
 const Menu = () => {
   
@@ -30,14 +31,20 @@ const Menu = () => {
   }
   const dispatch=useDispatch();
   const navigate=useNavigate();
-  const state=useSelector((state)=>state.user);
+  const user=useSelector((state)=>state.user);
   useEffect(()=>{
-    console.log(state);
-  },[state]);
+    console.log(user);
+  },[user]);
   function handleLogout(){
     //Backend API integration yet to be implemented.
-    dispatch(logout());
-    navigate('/login');
+    api.get('/user/logout').then((res)=>{
+      console.log(res.data);
+      dispatch(logout());
+      navigate('/login');
+    }).catch((err)=>{
+      console.log(err);
+    });
+    
   }
   return (
     <div className="menu-container">
