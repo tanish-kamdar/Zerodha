@@ -3,7 +3,6 @@ import "./BuyActionWindow.css";
 import GeneralContext from "./GeneralContext";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from 'axios';
 import "./SellActionWindow.css"
 import { useEffect } from "react";
 
@@ -14,20 +13,19 @@ export default function SellActionWindow({uid}) {
     const [stockQuantity,setStockQuantity]=useState(1);
     const generalContext=useContext(GeneralContext);
     const [qty,setQty]=useState(undefined);
-
     useEffect(()=>{
       async function fetchHoldings() {
-        let result=await api.get(`http://localhost:3001/holdings/${uid}/qty`);
+        let result=await api.get(`/holdings/${uid}/qty`);
         let documents=result.data;
         let quantity=documents.reduce((sum,doc)=>sum+doc.qty,0);
         setQty(quantity);
       }
       fetchHoldings();
-  });
+  },[]);
 
     async function handleSellClick(){
         
-        api.post("http://localhost:3001/order", {
+        await api.post("/order", {
         name: uid,
         qty: stockQuantity,
         price: stockPrice,
