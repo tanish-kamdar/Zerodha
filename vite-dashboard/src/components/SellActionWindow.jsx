@@ -7,7 +7,7 @@ import axios from 'axios';
 import "./SellActionWindow.css"
 import { useEffect } from "react";
 
-
+import api from "../../util/api";
 
 export default function SellActionWindow({uid}) {
     const [stockPrice,setStockPrice]=useState(0.0);
@@ -17,7 +17,7 @@ export default function SellActionWindow({uid}) {
 
     useEffect(()=>{
       async function fetchHoldings() {
-        let result=await axios.get(`http://localhost:3001/holdings/${uid}/qty`);
+        let result=await api.get(`http://localhost:3001/holdings/${uid}/qty`);
         let documents=result.data;
         let quantity=documents.reduce((sum,doc)=>sum+doc.qty,0);
         setQty(quantity);
@@ -27,11 +27,13 @@ export default function SellActionWindow({uid}) {
 
     async function handleSellClick(){
         
-        axios.post("http://localhost:3001/order", {
+        api.post("http://localhost:3001/order", {
         name: uid,
         qty: stockQuantity,
         price: stockPrice,
         mode: "SELL",
+        },{
+          withCredentials: true,
         });
         console.log(`Sell Order placed`);
 

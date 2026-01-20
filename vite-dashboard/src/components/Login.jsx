@@ -7,6 +7,7 @@ import existingUserSchema from '../schemas/existingUser';
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux';
 import {login} from '../../features/userSlice'
+import api from '../../util/api'
 // --- Icon Components (as SVGs) for clarity and reusability ---
 
 const KiteLogo = () => (
@@ -54,7 +55,7 @@ export default function Login() {
     const dispatch=useDispatch();
   const onSubmit=async (data)=>{
     try{
-    let res=await axios.post('http://localhost:3001/user/login',data,{withCredentials: true});
+    let res=await api.post('/user/login',data);
     console.log(res.data);
     
     if(res.data.success){
