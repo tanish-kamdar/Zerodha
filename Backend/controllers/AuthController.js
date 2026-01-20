@@ -6,7 +6,7 @@ const {
 const bcrypt = require("bcryptjs");
 const existingUserSchema = require("../util/existingUserZodSchema");
 const newUserSchema = require("../util/newUserZodSchema");
-const { jwt } = require("zod");
+const  jwt  = require("jsonwebtoken");
 
 module.exports.Signup = async (req, res, next) => {
   try {
@@ -141,7 +141,7 @@ module.exports.Refresh = async (req, res) => {
   // 1. mark old as revoked
   // 2. create new refresh token, store, set new cookie
 
-  return res.json({ success: true, accessToken });
+  return res.json({ success: true, id:userID, accessToken });
 };
 
 module.exports.Logout = async (req,res) => {
