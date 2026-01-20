@@ -7,8 +7,8 @@ import api
 const Positions = () => {
   let [positions, updatePositions] = useState([]);
   useEffect(() => {
-    api.get("http://localhost:3001/positions").then((res) => {
-      updatePositions(res.data);
+    api.get("/positions").then((res) => {
+      updatePositions(res.data.positions);
     });
   },[]);
   return (

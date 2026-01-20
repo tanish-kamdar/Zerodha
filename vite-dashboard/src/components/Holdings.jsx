@@ -9,8 +9,13 @@ import api from "../../util/api";
 const Holdings = () => {
   let [holdings, updateHoldings] = useState([]);
   useEffect(() => {
-    api.get("http://localhost:3001/holdings").then((res) => {
-      let fetchedHoldings = res.data;
+    api.get("/holdings").then((res) => {
+      
+      if(!res.data.holdings){
+        updateHoldings([]);
+        return;
+      }
+      let fetchedHoldings = res.data.holdings;
       updateHoldings(fetchedHoldings);
     });
   },[]);
