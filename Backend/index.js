@@ -9,13 +9,15 @@ const PositionModel = require("./models/PositionModel");
 const HoldingModel = require("./models/HoldingModel");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const userRoute = require("./routes/user");
+
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const requireAuth = require("./middleware/requireAuth");
 
 
 const holdingsRoute=require('./routes/holdings.js');
+const positionsRoute=require('./routes/positions.js');
+const userRoute = require("./routes/user");
 
 app.use(
   cors({
@@ -30,19 +32,10 @@ app.use(morgan("dev"));
 //Holdings Routes
 app.use("/holdings", holdingsRoute);
 
+//Positions Routes
+app.use('/positions',positionsRoute);
 
-app.get("/positions", requireAuth, async (req, res) => {
-  console.log(req.user);
-  let positions = await PositionModel.find();
-  console.log(
-    `Response Header before positions sends a response :`,
-    res.getHeaders()
-  );
-  res.json({
-    success: true,
-    positions,
-  });
-});
+
 app.post("/order", requireAuth, async (req, res) => {
 
   if(!req.body) {
