@@ -1,11 +1,26 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch,useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { logout } from "../../features/userSlice";
+import { useEffect } from "react";
+import api from "../../util/api";
 
 const Menu = () => {
+  
+  let initialRoute=useLocation().pathname;
+  let idx;
+  switch(initialRoute){
+    case '/' : idx=0; break;
+    case '/orders' : idx=1; break;
+    case '/holdings' : idx=2; break;
+    case '/positions' : idx=3; break;
+    case '/funds' : idx=4; break;
+    case '/apps' : idx=5; break;
+  }
 
   const [profileClicked,setProfileClick]=useState(false);
-  const [menuSelected,setMenuSelected]=useState(0);
+  const [menuSelected,setMenuSelected]=useState(idx);
 
   function handleMenuSelection(index){
     setMenuSelected(index);
@@ -14,11 +29,28 @@ const Menu = () => {
   function handleProfileClick(){
     setProfileClick(!profileClicked);
   }
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
+  const user=useSelector((state)=>state.user);
+  useEffect(()=>{
+    console.log(user);
+  },[user]);
+  function handleLogout(){
+    //Backend API integration yet to be implemented.
+    api.get('/user/logout').then((res)=>{
+      console.log(res.data);
+      dispatch(logout());
+      navigate('/login');
+    }).catch((err)=>{
+      console.log(err);
+    });
+    
+  }
   return (
     <div className="menu-container">
       <img src="logo.png" style={{ height:"1.5rem"}} className="img-fluid" />
       <div className="menus">
-        <ul>
+        <ul className="mb-0">
           <li>
             <Link to="/" onClick={()=>handleMenuSelection(0)}  className="" style={{textDecorationLine:"none"}}>
             <p className={menuSelected===0 ? "menu selected" : "menu"}>Dashboard</p>
@@ -51,12 +83,14 @@ const Menu = () => {
           </li>
         </ul>
         <hr />
-        <div className="profile" onClick={handleProfileClick}>
-          <div className="avatar">ZU</div>
-          <p className="username">USERID</p>
-        </div>
         
       </div>
+
+      <div className="profile d-flex align-items-center" onClick={handleProfileClick}>
+          <div className="avatar">ZU</div>
+          <p className="username mb-0">USERID</p>
+        </div>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
