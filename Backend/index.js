@@ -1,18 +1,20 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+
 const PORT = process.env.PORT || 3001;
+
 const mongoose = require("mongoose");
 const url = process.env.MONGO_URL;
-const bodyParser = require("body-parser");
+
 const cors = require("cors");
 
+const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 
-
-const holdingsRoute=require('./routes/holdings.js');
-const positionsRoute=require('./routes/positions.js');
+const holdingsRoute = require("./routes/holdings.js");
+const positionsRoute = require("./routes/positions.js");
 const userRoute = require("./routes/user");
 const orderRoute = require("./routes/order");
 
@@ -20,8 +22,9 @@ app.use(
   cors({
     origin: "http://localhost:5173",
     credentials: true,
-  })
+  }),
 );
+
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.SECRET));
 app.use(morgan("dev"));
@@ -30,12 +33,10 @@ app.use(morgan("dev"));
 app.use("/holdings", holdingsRoute);
 
 //Positions Routes
-app.use('/positions',positionsRoute);
+app.use("/positions", positionsRoute);
 
-
+//Order Routes
 app.use("/order", orderRoute);
-
-
 
 //User Routes
 app.use("/user", userRoute);
