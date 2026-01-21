@@ -14,6 +14,9 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const requireAuth = require("./middleware/requireAuth");
 
+
+const holdingsRoute=require('./routes/holdings.js');
+
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -23,18 +26,10 @@ app.use(
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.SECRET));
 app.use(morgan("dev"));
-app.get("/holdings", requireAuth, async (req, res) => {
-  let holdings = await HoldingModel.find();
-  console.log(
-    `Response Header before holdings sends a response :`,
-    res.getHeaders()
-  );
-  
-  res.json({
-    success: true,
-    holdings,
-  });
-});
+
+//Holdings Routes
+app.use("/holdings", holdingsRoute);
+
 
 app.get("/positions", requireAuth, async (req, res) => {
   console.log(req.user);
@@ -117,11 +112,7 @@ app.post("/order", requireAuth, async (req, res) => {
   res.status(201).json({ message: "Order placed successfully" });
 });
 
-app.get("/holdings/:uid/qty", async (req, res) => {
-  let uid = req.params.uid;
-  let qty = await HoldingModel.find({ name: uid });
-  res.send(qty);
-});
+
 
 //User Routes
 app.use("/user", userRoute);
