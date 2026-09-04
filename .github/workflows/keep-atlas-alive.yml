@@ -1,0 +1,31 @@
+name: MongoDB Keep Alive
+
+on:
+  schedule:
+    # This runs the script automatically every 7 days at midnight
+    - cron: '0 0 */7 * *'
+  workflow_dispatch: # Allows you to test it manually
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Project Dependencies
+        run: cd Backend && npm install
+        
+        
+      - name: Start App and Connect
+        env:
+          # Make sure your project's database variable matches this name
+          MONGODB_URI: ${{ secrets.MONGO_URL }} 
+        # Tries to start your app and shuts it down after 10 seconds
+        run: cd Backend && timeout 10s npm start || echo "App stopped after connecting."
+        
