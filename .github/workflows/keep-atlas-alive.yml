@@ -27,3 +27,4 @@ jobs:
           MONGODB_URI: ${{ secrets.MONGO_URL }} 
         # Tries to start your app and shuts it down after 10 seconds
         run: timeout 10s npm start || echo "App stopped after connecting."
+        working-directory: ./Backend
