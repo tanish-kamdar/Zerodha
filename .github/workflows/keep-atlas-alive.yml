@@ -19,7 +19,7 @@ jobs:
           node-version: 18
 
       - name: Install Project Dependencies
-        run: npm install
+        run: cd Backend && npm install
 
       - name: Start App and Connect
         env:
