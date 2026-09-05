@@ -18,9 +18,10 @@ const positionsRoute = require("./routes/positions.js");
 const userRoute = require("./routes/user");
 const orderRoute = require("./routes/order");
 
+const FRONTEND_URL=process.env.FRONTEND_URL || "http://localhost:5173";
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: FRONTEND_URL,
     credentials: true,
   }),
 );
