@@ -59,7 +59,7 @@ export const AppleIcon = () => (
 );
 
 // --- The Main Signup Component ---
-
+const API_URL=import.meta.env.VITE_API_URL;
 const Signup = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -87,7 +87,7 @@ const Signup = () => {
   const dispatch=useDispatch();
   const onSubmit = async (data) => {
     try{
-    let res=await axios.post('http://localhost:3001/user/signup',data,{withCredentials: true});
+    let res=await axios.post(`${API_URL}/user/signup`,data,{withCredentials: true});
     console.log(res.data);
     if(res.data.success){
       dispatch(login({

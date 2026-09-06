@@ -3,10 +3,12 @@ import axios from "axios";
 import { store } from "../redux/store.js"; // adjust imports
 import { login,logout } from "../features/userSlice.js";
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 
 // 2️⃣ Create Axios instance
 const api = axios.create({
-  baseURL: "http://localhost:3001/", // your backend base URL
+  baseURL: API_URL , // your backend base URL
   withCredentials: true, // needed for httpOnly refresh token cookies
 });
 
@@ -66,7 +68,7 @@ api.interceptors.response.use(
 
       try {
         const res = await axios.get(
-          "http://localhost:3001/user/refresh",
+          `${API_URL}/user/refresh`,
           { withCredentials: true }
         );
         const newToken = res.data.accessToken;
