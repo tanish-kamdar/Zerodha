@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import {z} from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import newUserSchema from "../schemas/newUser";
-import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import {login} from '../../features/userSlice'
+import api from '../../util/api';
 // Reusing Icon Components from the Login example for consistency
 export const KiteLogo = () => (
   <img src={logo} alt="Kite Logo" className="h-10 w-auto" />
@@ -59,7 +59,6 @@ export const AppleIcon = () => (
 );
 
 // --- The Main Signup Component ---
-const API_URL=import.meta.env.VITE_API_URL;
 const Signup = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -87,7 +86,7 @@ const Signup = () => {
   const dispatch=useDispatch();
   const onSubmit = async (data) => {
     try{
-    let res=await axios.post(`${API_URL}/user/signup`,data,{withCredentials: true});
+    let res=await api.post('/user/signup', data);
     console.log(res.data);
     if(res.data.success){
       dispatch(login({

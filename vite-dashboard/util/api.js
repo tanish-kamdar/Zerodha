@@ -3,12 +3,12 @@ import axios from "axios";
 import { store } from "../redux/store.js"; // adjust imports
 import { login,logout } from "../features/userSlice.js";
 
-const API_URL=import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, "");
 
 
 // 2️⃣ Create Axios instance
 const api = axios.create({
-  baseURL: API_URL , // your backend base URL
+  baseURL: API_URL,
   withCredentials: true, // needed for httpOnly refresh token cookies
 });
 
