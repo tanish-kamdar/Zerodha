@@ -34,7 +34,8 @@ module.exports.Signup = async (req, res, next) => {
     let refreshToken = createRefreshToken({ id: user._id });
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      sameSite: "Strict",
+      secure:true,
+      sameSite: "None",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
@@ -90,7 +91,8 @@ module.exports.Login = async (req, res, next) => {
     let accessToken = createAccessToken({ id: dbUser._id });
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      sameSite: "Strict",
+      secure:true,
+      sameSite: "None",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
     let {
@@ -121,7 +123,7 @@ module.exports.Refresh = async (req, res) => {
   let userID;
   jwt.verify(token, process.env.TOKEN_KEY, (err, user) => {
     if (err) {
-      res.status(401).json({
+      return res.status(401).json({
         success: false,
         message: "Refresh Token is invalid or expired",
       });
@@ -141,7 +143,7 @@ module.exports.Refresh = async (req, res) => {
   // 1. mark old as revoked
   // 2. create new refresh token, store, set new cookie
 
-  return res.json({ success: true, id:userID, accessToken });
+  return res.json({ success: true, user:userID, accessToken });
 };
 
 module.exports.Logout = async (req,res) => {
@@ -149,7 +151,8 @@ module.exports.Logout = async (req,res) => {
   res
     .clearCookie("refreshToken", {
       httpOnly: true,
-      sameSite: "Strict"
+      secure:true,
+      sameSite: "None"
     })
     .json({ message: "Logged out" });
 };
