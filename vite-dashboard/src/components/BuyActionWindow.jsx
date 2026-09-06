@@ -12,7 +12,7 @@ export default function BuyActionWindow({uid}) {
 
     function handleBuyClick(){
 
-        api.post("http://localhost:3001/order", {
+        api.post("/order", {
         name: uid,
         qty: stockQuantity,
         price: stockPrice,
